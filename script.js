@@ -2,7 +2,8 @@ $(document).ready(function() {
 	var config = {
 		uptimerobot: {
 			api_keys: [
-				"m780064142-0c40e8dfe56e316d773f691f"
+				"m780064142-0c40e8dfe56e316d773f691f",
+				"m780064172-bb8740c2fa9b01e79ae1816f"
 			],
 			logs: 1
 		},
@@ -132,4 +133,3 @@ $(document).ready(function() {
 		};
 	};
 });
-view raw

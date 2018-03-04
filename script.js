@@ -1,11 +1,12 @@
 $(document).ready(function() {
-	var config = {
+	var uptimeConfig = {
 		uptimerobot: {
 			api_keys: [
 				"m780064142-0c40e8dfe56e316d773f691f",
 				"m780064172-bb8740c2fa9b01e79ae1816f"
 			],
-			logs: 1
+			logs: 1,
+			response_times: 1
 		},
 		github: {
 			org: 'vertig0ne',
@@ -20,13 +21,14 @@ $(document).ready(function() {
 		'degraded performance': 'degraded',
 	};
 
-	var monitors = config.uptimerobot.api_keys;
+	var monitors = uptimeConfig.uptimerobot.api_keys;
 	for( var i in monitors ){
 		var api_key = monitors[i];
 		$.post('https://api.uptimerobot.com/v2/getMonitors', {
 			"api_key": api_key,
 			"format": "json",
-			"logs": config.uptimerobot.logs,
+			"logs": uptimeConfig.uptimerobot.logs,
+			"response_times": uptimeConfig.uptimerobot.response_times,
 		}, function(response) {
 			status( response );
 		}, 'json');
@@ -58,14 +60,49 @@ $(document).ready(function() {
 			var name = item.friendly_name;
 			var clas = item.class;
 			var text = item.text;
+			var cleanName = item.friendly_name.toLowerCase();
+			cleanName = cleanName.replace(' ', '');
+
 			$('#services').append('<div class="list-group-item">'+
 				'<span class="badge '+ clas + '">' + text + '</span>' +
-				'<h4 class="list-group-item-heading">' + name + '</h4>' +
+				'<a href="#" class="list-group-item-heading" onclick="\$\(\'\#' + cleanName + '\').toggleClass(\'collapse\');">' + name + '</a>' +
+				'<div id="' + cleanName + '" class="graph collapse">' + 
+				'<canvas id="' + cleanName + '_cvs" width="400" height="150"></canvas>' +
+			   '</div>' +
 				'</div>');
+
+			var gph_data = {
+				type: 'bar',
+				data: {
+					labels: [],
+					datasets: [{
+						label: 'Response Time (ms)',
+						data: [],
+					}]
+				}
+			};
+
+			var gph_opts = {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:true
+						}
+					}]
+				}
+			};
+
+			item.response_times.forEach(function(datapoint) {
+				gph_data.data.labels.push(datapoint.datetime);
+				gph_data.data.datasets[0].data.push(datapoint.value);
+			});
+
+			var gph_ctx = $('#' + cleanName + '_cvs');
+			var gph = new Chart(gph_ctx, gph_data, gph_opts);
 		});
 	};
 
-	$.getJSON( 'https://api.github.com/repos/' + config.github.org + '/' + config.github.repo + '/issues?state=all' ).done(message);
+	$.getJSON( 'https://api.github.com/repos/' + uptimeConfig.github.org + '/' + uptimeConfig.github.repo + '/issues?state=all' ).done(message);
 
 	function message(issues) {
 		issues.forEach(function(issue) {

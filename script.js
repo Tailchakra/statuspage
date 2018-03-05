@@ -53,8 +53,8 @@ $(document).ready(function () {
 		}, 'operational');
 
 		if (!$('#panel').data('incident')) {
-			$('#panel').attr('class', (status === 'operational' ? 'panel-success' : 'panel-warning'));
-			$('#paneltitle').html(status === 'operational' ? 'All systems are operational.' : 'One or more systems inoperative');
+			$('#panel').attr('class', 'panel-success');
+			$('#paneltitle').html('All systems are operational.');
 		}
 		data.monitors.forEach(function (item) {
 			var name = item.friendly_name;
@@ -143,8 +143,8 @@ $(document).ready(function () {
 
 			if (issue.state === 'open') {
 				$('#panel').data('incident', 'true');
-				$('#panel').attr('class', (status === 'operational' ? 'panel-success' : 'panel-warn'));
-				$('#paneltitle').html('<a href="#incidents">' + issue.title + '</a>');
+				$('#panel').attr('class', 'panel-warning');
+				$('#paneltitle').html('One or more systems inoperative');
 			}
 
 			var html = '<article class="timeline-entry">\n';
@@ -193,9 +193,9 @@ $(document).ready(function () {
 		}
 		else {
 			$('#maintenance').append('<div class="list-group-item">' +
-			'<h2 class="list-group-item-heading"></h2>' +
-			'<p class="list-group-item-text">There is currently no planned maintenance</p>' +
-			'</div>');
+				'<h2 class="list-group-item-heading"></h2>' +
+				'<p class="list-group-item-text">There is currently no planned maintenance</p>' +
+				'</div>');
 		}
 
 		function datetime(string) {

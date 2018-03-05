@@ -79,26 +79,32 @@ $(document).ready(function () {
 						label: 'Response Time (ms)',
 						data: [],
 					}]
-				}
-			};
-
-			var gph_opts = {
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero: true
-						}
-					}]
+				},
+				options: {
+					scales: {
+						xAxes: [
+							{
+								display: false,
+								ticks: {
+									display: false,
+									scaleFontSize: 0
+								}
+							}
+						]
+					}
 				}
 			};
 
 			item.response_times.forEach(function (datapoint) {
-				gph_data.data.labels.push(datapoint.datetime);
+				gph_data.data.labels.push(new Date(datapoint.datetime * 1000));
 				gph_data.data.datasets[0].data.push(datapoint.value);
 			});
 
+			gph_data.data.labels = gph_data.data.labels.reverse();
+			gph_data.data.datasets[0].data = gph_data.data.datasets[0].data.reverse();
+
 			var gph_ctx = $('#' + cleanName + '_cvs');
-			var gph = new Chart(gph_ctx, gph_data, gph_opts);
+			var gph = new Chart(gph_ctx, gph_data);
 		});
 	};
 

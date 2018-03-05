@@ -67,8 +67,8 @@ $(document).ready(function () {
 			var name = item.friendly_name;
 			var clas = item.class;
 			var text = item.text;
-			var cleanName = item.friendly_name.toLowerCase();
-			cleanName = cleanName.replace(' ', '');
+			var cleanName = item.friendly_name.replace(/[^0-9a-zA-Z ]/g, '');
+			cleanName = cleanName.replace(/ /g,'');
 
 			$('#services').append('<div class="list-group-item">' +
 				'<span class="badge ' + clas + '">' + text + '</span>' +

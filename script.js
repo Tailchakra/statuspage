@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	var uptimeConfig = {
+	var config = {
 		uptimerobot: {
 			api_keys: [
 				"m780064142-0c40e8dfe56e316d773f691f",
@@ -21,14 +21,14 @@ $(document).ready(function () {
 		'degraded performance': 'degraded',
 	};
 
-	var monitors = uptimeConfig.uptimerobot.api_keys;
+	var monitors = config.uptimerobot.api_keys;
 	for (var i in monitors) {
 		var api_key = monitors[i];
 		$.post('https://api.uptimerobot.com/v2/getMonitors', {
 			"api_key": api_key,
 			"format": "json",
-			"logs": uptimeConfig.uptimerobot.logs,
-			"response_times": uptimeConfig.uptimerobot.response_times,
+			"logs": config.uptimerobot.logs,
+			"response_times": config.uptimerobot.response_times,
 		}, function (response) {
 			status(response);
 		}, 'json');
@@ -108,7 +108,7 @@ $(document).ready(function () {
 		});
 	};
 
-	$.getJSON('https://api.github.com/repos/' + uptimeConfig.github.org + '/' + uptimeConfig.github.repo + '/issues?state=all').done(determineIncidentOrMaintenance);
+	$.getJSON('https://api.github.com/repos/' + config.github.org + '/' + config.github.repo + '/issues?state=all').done(determineIncidentOrMaintenance);
 
 	var maintainIssues = [];
 	var incidentIssues = [];

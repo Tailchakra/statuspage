@@ -157,7 +157,7 @@ $(document).ready(function () {
 			}
 
 			html += '<div class="timeline-label">\n';
-			html += '<span class="date">' + datetime(issue.created_at) + '</span>\n';
+			html += '<span class="date">' + new Date(issue.created_at) + '</span>\n';
 
 			if (issue.state === 'closed') {
 				html += '<span class="badge label-success pull-right">closed</span>';
@@ -174,7 +174,7 @@ $(document).ready(function () {
 			html += '<p>' + issue.body + '</p>\n';
 
 			if (issue.state === 'closed') {
-				html += '<p><em>Updated ' + datetime(issue.closed_at) + '<br/>';
+				html += '<p><em>Updated ' + new Date(issue.closed_at) + '<br/>';
 				html += 'The system is back in normal operation.</p>';
 			}
 			html += '</div>';
@@ -183,11 +183,20 @@ $(document).ready(function () {
 			$('#incidents').append(html);
 		});
 
-		maintainIssues.forEach(function (issue) {
+		if (maintainIssues.length > 0) {
+			maintainIssues.forEach(function (issue) {
+				$('#maintenance').append('<div class="list-group-item">' +
+					'<h2 class="list-group-item-heading">' + issue.title + '</h2>' +
+					'<p class="list-group-item-text">' + issue.body + '</p>' +
+					'</div>');
+			});
+		}
+		else {
 			$('#maintenance').append('<div class="list-group-item">' +
-				'<h2 class="list-group-item-heading">' + issue.title + '</h2>' +
-				'<p class="list-group-item-text">' + issue.body + '</p>');
-		});
+			'<h2 class="list-group-item-heading"></h2>' +
+			'<p class="list-group-item-text">There is currently no planned maintenance</p>' +
+			'</div>');
+		}
 
 		function datetime(string) {
 			var datetime = string.split('T');

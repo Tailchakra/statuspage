@@ -72,7 +72,7 @@ $(document).ready(function () {
 				'</div>');
 
 			var gph_data = {
-				type: 'bar',
+				type: 'line',
 				data: {
 					labels: [],
 					datasets: [{

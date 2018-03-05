@@ -96,7 +96,7 @@ $(document).ready(function () {
 			};
 
 			item.response_times.forEach(function (datapoint) {
-				gph_data.data.labels.push(new Date(datapoint.datetime * 1000));
+				gph_data.data.labels.push(new Date(datapoint.datetime * 1000).toISOString());
 				gph_data.data.datasets[0].data.push(datapoint.value);
 			});
 
@@ -157,7 +157,7 @@ $(document).ready(function () {
 			}
 
 			html += '<div class="timeline-label">\n';
-			html += '<span class="date">' + new Date(issue.created_at) + '</span>\n';
+			html += '<span class="date">' + formatDate(new Date(issue.created_at),'dd-MM-yyyy hh:mm:ss (ZZZZ)') + '</span>\n';
 
 			if (issue.state === 'closed') {
 				html += '<span class="badge label-success pull-right">closed</span>';
@@ -174,7 +174,7 @@ $(document).ready(function () {
 			html += '<p>' + issue.body + '</p>\n';
 
 			if (issue.state === 'closed') {
-				html += '<p><em>Updated ' + new Date(issue.closed_at) + '<br/>';
+				html += '<p><em>Updated ' + formatDate(new Date(issue.closed_at),'dd-MM-yyyy hh:mm:ss (ZZZZ)') + '<br/>';
 				html += 'The system is back in normal operation.</p>';
 			}
 			html += '</div>';
@@ -196,6 +196,24 @@ $(document).ready(function () {
 				'<h2 class="list-group-item-heading"></h2>' +
 				'<p class="list-group-item-text">There is currently no planned maintenance</p>' +
 				'</div>');
+		}
+
+		function formatDate(x, y) {
+			var z = {
+				M: x.getMonth() + 1,
+				d: x.getDate(),
+				h: x.getHours(),
+				m: x.getMinutes(),
+				s: x.getSeconds(),
+				Z: x.toString().replace(/.*[(](.*)[)].*/,'$1'),
+			};
+			y = y.replace(/(M+|d+|h+|m+|s+|Z+)/g, function(v) {
+				return ((v.length > 1 ? "0" : "") + eval('z.' + v.slice(-1))).slice(-2)
+			});
+		
+			return y.replace(/(y+)/g, function(v) {
+				return x.getFullYear().toString().slice(-v.length)
+			});
 		}
 
 		function datetime(string) {

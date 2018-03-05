@@ -12,7 +12,9 @@ $(document).ready(function () {
 			logs: 1,
 			response_times: 1,
 			all_time_uptime_ratio: 1,
-			custom_uptime_ratios: "1-7-14-30"
+			custom_uptime_ratios: "1-7-14-30",
+			response_times_average: 30,
+			response_times_warning: 300,
 		},
 		github: {
 			org: 'vertig0ne',
@@ -20,14 +22,14 @@ $(document).ready(function () {
 		}
 	};
 
-	var status_text = {
+	const status_text = {
 		'operational': 'operational',
 		'investigating': 'investigating',
 		'major outage': 'outage',
 		'degraded performance': 'degraded',
 	};
 
-	var monitors = config.uptimerobot.api_keys;
+	const monitors = config.uptimerobot.api_keys;
 	for (var i in monitors) {
 		var api_key = monitors[i];
 		$.post('https://api.uptimerobot.com/v2/getMonitors', {
@@ -36,7 +38,8 @@ $(document).ready(function () {
 			"logs": config.uptimerobot.logs,
 			"response_times": config.uptimerobot.response_times,
 			"all_time_uptime_ratio": config.uptimerobot.all_time_uptime_ratio,
-			"custom_uptime_ratios": config.uptimerobot.custom_uptime_ratios
+			"custom_uptime_ratios": config.uptimerobot.custom_uptime_ratios,
+			"response_times_average": config.uptimerobot.response_times_average
 		}, function (response) {
 			status(response);
 		}, 'json');
@@ -50,6 +53,10 @@ $(document).ready(function () {
 				check.lasterrortime = Date.now();
 			}
 			if (check.status === 2 && Date.now() - (check.lasterrortime * 1000) <= 86400000) {
+				check.class = 'label-danger';
+				check.text = 'major outage';
+			}
+			if (check.status === 2 && Math.round(check.average_response_time) >= config.uptimerobot.response_times_warning) {
 				check.class = 'label-warning';
 				check.text = 'degraded performance';
 			}

@@ -96,6 +96,7 @@ $(document).ready(function () {
 			'<td>' + upt[2] + '%</td>' +
 			'<td>' + upt[3] + '%</td>' +
 			'<td>' + uptimeForever + '%</td>' +
+			'<td>' + item.average_response_time + '</td>' +
 			'</tr>');
 
 			var gph_data = {

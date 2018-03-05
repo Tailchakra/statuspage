@@ -3,10 +3,15 @@ $(document).ready(function () {
 		uptimerobot: {
 			api_keys: [
 				"m780064142-0c40e8dfe56e316d773f691f",
-				"m780064172-bb8740c2fa9b01e79ae1816f"
+				"m780064172-bb8740c2fa9b01e79ae1816f",
+				"m780064176-d54a380f84fe0ee858812c12",
+				"m780079004-b4695aa518d32df04ac5e17a",
+				"m780079005-b9fe41107c917655d005a6e1",
 			],
 			logs: 1,
-			response_times: 1
+			response_times: 1,
+			all_time_uptime_ratio: 1,
+			custom_uptime_ratios: "1-7-14-30"
 		},
 		github: {
 			org: 'vertig0ne',
@@ -29,6 +34,8 @@ $(document).ready(function () {
 			"format": "json",
 			"logs": config.uptimerobot.logs,
 			"response_times": config.uptimerobot.response_times,
+			"all_time_uptime_ratio": config.uptimerobot.all_time_uptime_ratio,
+			"custom_uptime_ratios": config.uptimerobot.custom_uptime_ratios
 		}, function (response) {
 			status(response);
 		}, 'json');
@@ -199,13 +206,19 @@ $(document).ready(function () {
 		}
 
 		function formatDate(x, y) {
+			var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+			var days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 			var z = {
-				M: x.getMonth() + 1,
+				m: x.getMonth() + 1,
+				M: months[x.getMonth()],
 				d: x.getDate(),
-				h: x.getHours(),
-				m: x.getMinutes(),
+				H: x.getHours(),
+				i: x.getMinutes(),
 				s: x.getSeconds(),
 				Z: x.toString().replace(/.*[(](.*)[)].*/,'$1'),
+				Y: x.getFullYear(),
+				y: x.getYear()
+
 			};
 			y = y.replace(/(M+|d+|h+|m+|s+|Z+)/g, function(v) {
 				return ((v.length > 1 ? "0" : "") + eval('z.' + v.slice(-1))).slice(-2)

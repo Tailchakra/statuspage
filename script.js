@@ -115,7 +115,7 @@ $(document).ready(function () {
 			};
 
 			item.response_times.forEach(function (datapoint) {
-				gph_data.data.labels.push(formatDate(new Date(datapoint.datetime * 1000),'DD dd MM YY HH:ii:ss (TT)'));
+				gph_data.data.labels.push(formatDate(new Date(datapoint.datetime * 1000),'D d M Y H:i:s (T)'));
 				gph_data.data.datasets[0].data.push(datapoint.value);
 			});
 
@@ -176,7 +176,7 @@ $(document).ready(function () {
 			}
 
 			html += '<div class="timeline-label">\n';
-			html += '<span class="date">' + formatDate(new Date(issue.created_at),'DD dd MM YY HH:ii:ss (TT)') + '</span>\n';
+			html += '<span class="date">' + formatDate(new Date(issue.created_at),'D d M Y H:i:s (T)') + '</span>\n';
 
 			if (issue.state === 'closed') {
 				html += '<span class="badge label-success pull-right">closed</span>';
@@ -193,7 +193,7 @@ $(document).ready(function () {
 			html += '<p>' + issue.body + '</p>\n';
 
 			if (issue.state === 'closed') {
-				html += '<p><em>Updated ' + formatDate(new Date(issue.closed_at),'DD dd MM YY HH:ii:ss (TT)') + '<br/>';
+				html += '<p><em>Updated ' + formatDate(new Date(issue.closed_at),'D d M Y H:i:s (T)') + '<br/>';
 				html += 'The system is back in normal operation.</p>';
 			}
 			html += '</div>';
@@ -212,7 +212,7 @@ $(document).ready(function () {
 		}
 		else {
 			$('#maintenance').append('<div class="list-group-item">' +
-				'<h2 class="list-group-item-heading"></h2>' +
+				'<h4 class="list-group-item-heading"></h4>' +
 				'<p class="list-group-item-text">There is currently no planned maintenance</p>' +
 				'</div>');
 		}

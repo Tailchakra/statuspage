@@ -155,10 +155,28 @@ $(document).ready(function () {
 				});
 			}
 		});
-		message(incidentIssues);
+		_gitHubIncidents(incidentIssues);
+		_gitHubMaintainance();
 	}
 
-	function message(issues) {
+	function _gitHubMaintainance() {
+		if (maintainIssues.length > 0) {
+			maintainIssues.forEach(function (issue) {
+				$('#maintenance').append('<div class="list-group-item">' +
+					'<h2 class="list-group-item-heading">' + issue.title + '</h2>' +
+					'<p class="list-group-item-text">' + issue.body + '</p>' +
+					'</div>');
+			});
+		}
+		else {
+			$('#maintenance').append('<div class="list-group-item">' +
+				'<h4 class="list-group-item-heading"></h4>' +
+				'<p class="list-group-item-text">There is currently no planned maintenance</p>' +
+				'</div>');
+		}
+	}
+
+	function _gitHubIncidents(issues) {
 		issues.forEach(function (issue) {
 			var status = issue.labels.reduce(function (status, label) {
 				if (/^status:/.test(label.name)) {
@@ -215,21 +233,6 @@ $(document).ready(function () {
 			html += '</article>';
 			$('#incidents').append(html);
 		});
-
-		if (maintainIssues.length > 0) {
-			maintainIssues.forEach(function (issue) {
-				$('#maintenance').append('<div class="list-group-item">' +
-					'<h2 class="list-group-item-heading">' + issue.title + '</h2>' +
-					'<p class="list-group-item-text">' + issue.body + '</p>' +
-					'</div>');
-			});
-		}
-		else {
-			$('#maintenance').append('<div class="list-group-item">' +
-				'<h4 class="list-group-item-heading"></h4>' +
-				'<p class="list-group-item-text">There is currently no planned maintenance</p>' +
-				'</div>');
-		}
 	};
 
 	function formatDate(x, y) {

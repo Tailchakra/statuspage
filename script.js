@@ -233,7 +233,7 @@ $(document).ready(function () {
 			m: (x.getHours().toString().length == 2)? x.getMonth() + 1 : '0' +  x.getMonth() + 1,
 			M: months[x.getMonth()],
 			n:  x.getMonth() + 1,
-			L: parseInt(((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)),
+			L: parseInt(((x.getFullYear() % 4 == 0) && (x.getFullYear() % 100 != 0)) || (x.getFullYear() % 400 == 0)),
 			F: fullMonths[x.getMonth()],
 			d: (x.getDate().toString().length == 2)? x.getDate() : '0' + x.getDate(),
 			j: x.getDate(),

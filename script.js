@@ -77,6 +77,18 @@ $(document).ready(function () {
 				'<canvas id="' + cleanName + '_cvs" width="400" height="150"></canvas>' +
 				'</div>' +
 				'</div>');
+			
+			var upt = item.custom_uptime_ratio.split('-');
+			var uptimeForever = item.all_time_uptime_ratio;
+
+			$('#statistics tbody').append('<tr>' +
+			'<td>' + item.friendly_name + '</td>' +
+			'<td>' + upt[0] + '%</td>' +
+			'<td>' + upt[1] + '%</td>' +
+			'<td>' + upt[2] + '%</td>' +
+			'<td>' + upt[3] + '%</td>' +
+			'<td>' + uptimeForever + '%</td>' +
+			'</tr>');
 
 			var gph_data = {
 				type: 'line',

@@ -96,7 +96,7 @@ $(document).ready(function () {
 			};
 
 			item.response_times.forEach(function (datapoint) {
-				gph_data.data.labels.push(new Date(datapoint.datetime * 1000).toISOString());
+				gph_data.data.labels.push(new Date(datapoint.datetime * 1000);
 				gph_data.data.datasets[0].data.push(datapoint.value);
 			});
 

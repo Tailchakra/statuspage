@@ -115,7 +115,7 @@ $(document).ready(function () {
 			};
 
 			item.response_times.forEach(function (datapoint) {
-				gph_data.data.labels.push(new Date(datapoint.datetime * 1000));
+				gph_data.data.labels.push(formatDate(new Date(datapoint.datetime * 1000),'DD dd MM YY HH:ii:ss (TT)'));
 				gph_data.data.datasets[0].data.push(datapoint.value);
 			});
 
@@ -176,7 +176,7 @@ $(document).ready(function () {
 			}
 
 			html += '<div class="timeline-label">\n';
-			html += '<span class="date">' + formatDate(new Date(issue.created_at),'dd-MM-yyyy hh:mm:ss (ZZZZ)') + '</span>\n';
+			html += '<span class="date">' + formatDate(new Date(issue.created_at),'DD dd MM YY HH:ii:ss (TT)') + '</span>\n';
 
 			if (issue.state === 'closed') {
 				html += '<span class="badge label-success pull-right">closed</span>';
@@ -193,7 +193,7 @@ $(document).ready(function () {
 			html += '<p>' + issue.body + '</p>\n';
 
 			if (issue.state === 'closed') {
-				html += '<p><em>Updated ' + formatDate(new Date(issue.closed_at),'dd-MM-yyyy hh:mm:ss (ZZZZ)') + '<br/>';
+				html += '<p><em>Updated ' + formatDate(new Date(issue.closed_at),'DD dd MM YY HH:ii:ss (TT)') + '<br/>';
 				html += 'The system is back in normal operation.</p>';
 			}
 			html += '</div>';
@@ -216,36 +216,39 @@ $(document).ready(function () {
 				'<p class="list-group-item-text">There is currently no planned maintenance</p>' +
 				'</div>');
 		}
+	};
 
-		function formatDate(x, y) {
-			var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-			var days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-			var z = {
-				m: x.getMonth() + 1,
-				M: months[x.getMonth()],
-				d: x.getDate(),
-				H: x.getHours(),
-				i: x.getMinutes(),
-				s: x.getSeconds(),
-				Z: x.toString().replace(/.*[(](.*)[)].*/,'$1'),
-				Y: x.getFullYear(),
-				y: x.getYear()
-
-			};
-			y = y.replace(/(M+|d+|h+|m+|s+|Z+)/g, function(v) {
-				return ((v.length > 1 ? "0" : "") + eval('z.' + v.slice(-1))).slice(-2)
-			});
-		
-			return y.replace(/(y+)/g, function(v) {
-				return x.getFullYear().toString().slice(-v.length)
-			});
-		}
-
-		function datetime(string) {
-			var datetime = string.split('T');
-			var date = datetime[0];
-			var time = datetime[1].replace('Z', '');
-			return date + ' ' + time;
+	function formatDate(x, y) {
+		var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+		var fullMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		var days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+		var fullDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+		var z = {
+			a: (x.getHours() >= 12)? 'pm' : 'am',
+			A: (x.getHours() >= 12)? 'PM' : 'AM',
+			m: x.getMonth() + 1,
+			M: months[x.getMonth()],
+			F: fullMonths[x.getMonth()],
+			d: (x.getDate().toString().length == 2)? x.getDate() : '0' + x.getDate(),
+			D: days[x.getDay()],
+			l: fullDays[x.getDay()],
+			N: x.getDay() + 1,
+			g: x.getHours(),
+			H: (x.getHours().toString().length == 2)? x.getHours() : '0' + x.getHours(),
+			h: ((x.getHours() + 11) % 12 + 1),
+			i: (x.getMinutes().toString().length == 2)? x.getMinutes() : '0' + x.getMinutes(),
+			s: (x.getSeconds().toString().length == 2)? x.getSeconds() : '0' + x.getSeconds(), 
+			T: x.toString().replace(/.*[(](.*)[)].*/,'$1'),
+			Y: x.getFullYear(),
+			y: x.getYear(),
 		};
+		y = y.replace(/(a+|A+|m+|M+|F+|d+|D+|l+|N+|h+|H+|i+|s+|T+|Y+|y+)/g, function(v) {
+			var t = eval('z.' + v.slice(-1));
+			return t;
+		});
+	
+		return y.replace(/(y+)/g, function(v) {
+			return x.getFullYear().toString().slice(-v.length)
+		});
 	};
 });

@@ -54,7 +54,7 @@ $(document).ready(function () {
 			check.class = 'label-danger';
 			check.text = 'major outage';
 		}
-		if (check.status === 2 && Math.round(check.average_response_time) >= 1500) {
+		if (check.status === 2 && Math.round(check.average_response_time) >= 1500.000) {
 			check.class = 'label-warning';
 			check.text = 'degraded performance';
 		}
